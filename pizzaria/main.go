@@ -9,7 +9,10 @@ type Pizza struct {
 }
 
 func main() {
-	nomePizzaria := "Pizzaria"
-	instagram, telefone := "@pizzaria_go", 11951
-	fmt.Println(nomePizzaria, instagram, telefone)
+	var pizzas = []Pizza{
+		{ID: 1, nome: "Toscana", preco: 49.5},
+		{ID: 2, nome: "Marguerita", preco: 79.5},
+		{ID: 3, nome: "Atum com queijo", preco: 69.5},
+	}
+	fmt.Println(pizzas)
 }
