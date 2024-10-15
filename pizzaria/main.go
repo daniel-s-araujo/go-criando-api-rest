@@ -29,12 +29,17 @@ func getPizzas(c *gin.Context) {
 
 func postPizzas(c *gin.Context) {
 	var newPizza models.Pizza
+
 	if err := c.ShouldBindJSON(&newPizza); err != nil {
 		c.JSON(400, gin.H{
 			"erro": err.Error()})
 		return
 	}
+
+	newPizza.ID = len(pizzas) + 1
 	pizzas = append(pizzas, newPizza)
+	savePizza()
+	c.JSON(201, newPizza)
 }
 
 func getPizzasByID(c *gin.Context) {
@@ -70,5 +75,21 @@ func loadPizzas() {
 
 	if err := decoder.Decode(&pizzas); err != nil {
 		fmt.Println("Error decoding JSON: ", err)
+	}
+}
+
+func savePizza() {
+	file, err := os.Create("dados/pizza.json")
+
+	if err != nil {
+		fmt.Println("Error file:", err)
+		return
+	}
+
+	defer file.Close()
+	encoder := json.NewEncoder(file)
+
+	if err := encoder.Encode(pizzas); err != nil {
+		fmt.Println("Error encoding JSON: ", err)
 	}
 }
